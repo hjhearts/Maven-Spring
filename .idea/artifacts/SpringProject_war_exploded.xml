@@ -35,6 +35,16 @@
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.4" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.4" />
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Maven: commons-digester:commons-digester:2.0" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-api:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-core:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-jsp:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-request-api:1.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-request-servlet:1.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-servlet:3.0.8" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-template:2.2.2" />
+          <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.5.8" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.6" />
         </element>
       </element>
     </root>

@@ -33,6 +33,7 @@ public class MemberControllerImpl implements MemberController{
     public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("member/listMembers");
         logger.info("info 레벨 : viewName = " + getViewName(request));
+        logger.debug("debug 레벨 : viewName = " + getViewName(request));
         List<MemberVO> membersList = memberService.listMembers();
         mav.addObject("membersList", membersList);
         return mav;
