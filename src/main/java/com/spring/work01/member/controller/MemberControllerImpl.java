@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller("memberController")
 public class MemberControllerImpl implements MemberController{
-    @Autowired
     private MemberService memberService;
 
 }
