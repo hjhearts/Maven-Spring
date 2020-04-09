@@ -15,11 +15,11 @@
     <table>
         <tr>
             <td><label>아이디</label></td>
-            <td><input type="text" name="id"/></td>
+            <td><input type="text" name="userID"/></td>
         </tr>
         <tr>
             <td><label>패스워드</label></td>
-            <td><input type="password" name="pwd"/></td>
+            <td><input type="password" name="userPWD"/></td>
         </tr>
     </table>
     <input type="submit" value="로그인"/>

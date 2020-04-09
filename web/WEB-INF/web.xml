@@ -7,6 +7,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/applicationContext.xml
+            /WEB-INF/action-mybatis.xml
         </param-value>
     </context-param>
     <listener>

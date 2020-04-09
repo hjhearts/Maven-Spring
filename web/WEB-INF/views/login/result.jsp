@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>ID : ${info.id}    PWD : ${info.pwd}</h1>
+    <h1>ID : ${userID}    Name : ${userName}</h1>
 </body>
 </html>

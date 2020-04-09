@@ -1,6 +1,8 @@
 package com.spring.work01.member;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +20,17 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/test/login.do", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView login(/*@RequestParam(value = "id", required = true) String id,
-                              @RequestParam(value = "pwd", required = true) String pwd,
-                              */
-                              @RequestParam Map<String, String> info,
+    public ModelAndView login(@ModelAttribute("info") LoginVO loginVO,
                               HttpServletRequest request, HttpServletResponse response) throws Exception{
         request.setCharacterEncoding("utf-8");
-        ModelAndView mav = new ModelAndView("login/result");
-        mav.addObject("info", info);
-        return mav;
+        return new ModelAndView("login/result");
+    }
+    @RequestMapping(value = "/test/login2.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public String login2(Model model, HttpServletRequest request, HttpServletResponse response)
+        throws Exception{
+        request.setCharacterEncoding("utf-8");
+        model.addAttribute("userID", "hong");
+        model.addAttribute("userName", "홍길동");
+        return "login/result";
     }
 }
