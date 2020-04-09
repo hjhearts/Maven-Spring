@@ -18,4 +18,9 @@ public class MemberDAOImpl implements MemberDAO{
     public List<MemberVO> selectAllMemberList() {
         return sqlSession.selectList("mapper.member.selectAllMemberList");
     }
+
+    @Override
+    public int insertMember(MemberVO memberVO) {
+        return sqlSession.insert("mapper.member.insertMember", memberVO);
+    }
 }

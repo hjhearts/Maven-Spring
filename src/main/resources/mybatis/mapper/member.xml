@@ -12,7 +12,13 @@
     </resultMap>
     <select id="selectAllMemberList" resultMap="memResult">
         <![CDATA[
-            select * from T_MEMBER
+            select * from T_MEMBER order by JOINDATE DESC
         ]]>
     </select>
+    <insert id="insertMember" parameterType="memberVO">
+        <![CDATA[
+            insert into T_MEMBER(id, pwd, name, email, JOINDATE)
+            values (#{id}, #{pwd}, #{name}, #{email}, DEFAULT)
+        ]]>
+    </insert>
 </mapper>

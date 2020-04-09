@@ -31,5 +31,6 @@
             </tr>
         </c:forEach>
     </table>
+<a href="${pageContext.request.contextPath}/member/addMemberForm.do">회원가입</a>
 </body>
 </html>
