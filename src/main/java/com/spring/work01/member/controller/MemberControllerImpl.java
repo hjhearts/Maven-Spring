@@ -7,13 +7,17 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +35,8 @@ public class MemberControllerImpl implements MemberController{
     @Override
     @RequestMapping(value = "/member/listMembers.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView mav = new ModelAndView("member/listMembers");
+        ModelAndView mav = new ModelAndView(getViewName(request));
         logger.info("info 레벨 : viewName = " + getViewName(request));
-        logger.debug("debug 레벨 : viewName = " + getViewName(request));
         List<MemberVO> membersList = memberService.listMembers();
         mav.addObject("membersList", membersList);
         return mav;
@@ -50,12 +53,48 @@ public class MemberControllerImpl implements MemberController{
         memberVO.setEmail(paramMap.get("email"));
         int status = memberService.addMember(memberVO);
         System.out.println("STATUS : " + status);
-        return listMembers(request, response);
+        return new ModelAndView("redirect:/member/listMembers.do");
     }
+
     @Override
-    @RequestMapping(value = "/member/addMemberForm.do", method = RequestMethod.GET)
-    public ModelAndView addMemberForm(){
-        return new ModelAndView("member/addMemberForm");
+    @RequestMapping(value = "/member/login.do", method = RequestMethod.POST)
+    public ModelAndView login(@ModelAttribute MemberVO loginVO,
+                              RedirectAttributes rAttr,
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws Exception{
+        request.setCharacterEncoding("utf-8");
+        memberVO = memberService.login(loginVO);
+        ModelAndView mav = new ModelAndView();
+        if(memberVO != null){
+            HttpSession session = request.getSession();
+            mav.setViewName("redirect:/member/listMembers.do");
+            session.setAttribute("member", memberVO);
+            session.setAttribute("isLogon", true);
+        }else{
+            rAttr.addAttribute("result", "loginFailed");
+            mav.setViewName("redirect:/member/loginForm.do");
+        }
+        return mav;
+    }
+
+    @Override
+    @RequestMapping(value = "/member/logout.do", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        session.removeAttribute("member");
+        session.removeAttribute("isLogon");
+        return new ModelAndView("redirect:/member/listMembers.do");
+    }
+
+    @RequestMapping(value = "/member/*Form.do", method = RequestMethod.GET)
+    private ModelAndView form(@RequestParam(value = "result", required = false) String result,
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws Exception{
+        String viewName = getViewName(request);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("result", result);
+        mav.setViewName(viewName);
+        return mav;
     }
 
     private String getViewName(HttpServletRequest request){
@@ -82,7 +121,7 @@ public class MemberControllerImpl implements MemberController{
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
         }
         if(fileName.lastIndexOf("/") != -1){
-            fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+            fileName = fileName.substring(fileName.lastIndexOf("/", 1));
         }
         System.out.println(fileName);
         return fileName;

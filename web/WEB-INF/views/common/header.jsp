@@ -16,6 +16,15 @@
     <style>
         #myFont{font-size: 30px}
     </style>
+    <c:choose>
+        <c:when test="${result == 'loginFailed'}">
+            <script>
+                window.onload = function(){
+                    alert('아이디나 비밀번호가 틀립니다');
+                }
+            </script>
+        </c:when>
+    </c:choose>
 </head>
 <body>
     <table style="border:0; width:100%">
@@ -29,7 +38,16 @@
                 <h1><span id="myFont">스프링실습 홈페이지</span></h1>
             </td>
             <td>
-                <a href="#"><h3>로그인</h3></a>
+                <c:choose>
+                    <c:when test="${empty member}">
+                        <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+                        <a href="${contextPath}/member/addMemberForm.do"><h3>회원가입</h3></a>
+                    </c:when>
+                    <c:when test="${not empty member && isLogon == true}">
+                        <h3>환영합니다 ${member.id}님</h3>
+                        <a href="${contextPath}/member/logout.do">로그아웃</a>
+                    </c:when>
+                </c:choose>
             </td>
         </tr>
     </table>

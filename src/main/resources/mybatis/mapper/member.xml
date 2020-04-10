@@ -15,6 +15,10 @@
             select * from T_MEMBER order by JOINDATE DESC
         ]]>
     </select>
+    <select id="login" resultType="memberVO" parameterType="memberVO"><![CDATA[
+        select * from T_MEMBER
+        where ID = #{id} and PWD = #{pwd}
+    ]]></select>
     <insert id="insertMember" parameterType="memberVO">
         <![CDATA[
             insert into T_MEMBER(id, pwd, name, email, JOINDATE)
