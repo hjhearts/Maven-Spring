@@ -59,4 +59,6 @@ public class MemberVO {
     public void setJoinDate(Date joinDate) {
         this.joinDate = joinDate;
     }
+
+    public String toString() {return id + ", " + pwd + ", " + name + ", " + email;}
 }

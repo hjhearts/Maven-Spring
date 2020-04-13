@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller("localeController")
 public class LocaleController {
-    @RequestMapping(value = "/test/locale.do", method = RequestMethod.GET)
+//    @RequestMapping(value = "/test/locale.do", method = RequestMethod.GET)
     public String locale(HttpServletRequest request, HttpServletResponse response) throws Exception{
         return "loctest/locale";
     }

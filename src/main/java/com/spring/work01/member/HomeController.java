@@ -1,4 +1,4 @@
-/*package com.spring.work01.member;
+package com.spring.work01.member;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,11 +9,8 @@ import java.util.Locale;
 
 @Controller
 public class HomeController {
-    @RequestMapping(value = "/main.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/go", method = RequestMethod.GET)
     public String home(Locale locale, Model model){
-        return "main";
+        return "JSONTest";
     }
 }
-
-
- */
