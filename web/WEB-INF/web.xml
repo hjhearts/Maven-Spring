@@ -9,6 +9,7 @@
             /WEB-INF/applicationContext.xml
             /WEB-INF/action-mybatis.xml
             /WEB-INF/multipart-context.xml
+            /WEB-INF/email-context.xml
         </param-value>
     </context-param>
     <listener>
