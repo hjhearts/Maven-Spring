@@ -23,9 +23,16 @@ public class MailController {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
-        mailService.sendMail("gkska1029@naver.com", "테스트 이메일", "테스트 이메일입니다 sendMail()");
-        mailService.sendConfiguredMail("configured email입니다.");
-        mailService.sendApacheMail();
+        StringBuffer sb = new StringBuffer();
+        sb.append("<html><body>");
+        sb.append("<meta http-equiv='Content-Type' content='text/html; charset=euc-kr'>");
+        sb.append("<h1>제품 소개</h1><br/>");
+        sb.append("신간 도서 소개.<br/><br/>");
+        sb.append("<a href='http://www.yes24.com/Product/Goods/86038744?Acode=101'>");
+        sb.append("<img src='http://image.yes24.com/goods/86038744/800x0'/></a>");
+        sb.append("</body></html>");
+        String str = sb.toString();
+        mailService.sendMail("gkska1029@naver.com", "Test HTML Mail", str);
         out.print("메일을 보냈습니다.");
     }
 }

@@ -32,7 +32,7 @@ public class MailService {
             messageHelper.setFrom("hjhearts21@gmail.com");
             messageHelper.setSubject(subject);
             messageHelper.setTo(to);
-            messageHelper.setText(body);
+            messageHelper.setText(body, true);
             mailSender.send(message);
         }catch(Exception e){
             e.printStackTrace();
