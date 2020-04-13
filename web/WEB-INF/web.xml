@@ -8,6 +8,7 @@
         <param-value>
             /WEB-INF/applicationContext.xml
             /WEB-INF/action-mybatis.xml
+            /WEB-INF/multipart-context.xml
         </param-value>
     </context-param>
     <listener>
