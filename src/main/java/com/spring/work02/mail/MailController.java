@@ -23,6 +23,8 @@ public class MailController {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
+        mailService.sendMail("gkska1029@naver.com", "테스트 이메일", "테스트 이메일입니다 sendMail()");
+        mailService.sendConfiguredMail("configured email입니다.");
         mailService.sendApacheMail();
         out.print("메일을 보냈습니다.");
     }
