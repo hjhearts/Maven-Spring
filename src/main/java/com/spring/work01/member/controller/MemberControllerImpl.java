@@ -34,7 +34,7 @@ public class MemberControllerImpl implements MemberController{
     @Override
     @RequestMapping(value = "/member/listMembers.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView mav = new ModelAndView(getViewName(request));
+        ModelAndView mav = new ModelAndView((String)request.getAttribute("viewName"));
         logger.info("info 레벨 : viewName = " + getViewName(request));
         List<MemberVO> membersList = memberService.listMembers();
         mav.addObject("membersList", membersList);

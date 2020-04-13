@@ -1,4 +1,4 @@
-package com.spring.work01.member;
+/*package com.spring.work01.member;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,3 +14,6 @@ public class HomeController {
         return "main";
     }
 }
+
+
+ */
