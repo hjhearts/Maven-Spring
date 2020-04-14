@@ -31,11 +31,15 @@ public class MemberControllerImpl implements MemberController{
     @Qualifier("memberVO")
     private MemberVO memberVO;
 
+    private ModelAndView main(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String viewName = (String)request.getAttribute("viewName");
+        return new ModelAndView(viewName);
+    }
+
     @Override
     @RequestMapping(value = "/member/listMembers.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView((String)request.getAttribute("viewName"));
-        logger.info("info 레벨 : viewName = " + getViewName(request));
         List<MemberVO> membersList = memberService.listMembers();
         mav.addObject("membersList", membersList);
         return mav;
@@ -66,9 +70,14 @@ public class MemberControllerImpl implements MemberController{
         ModelAndView mav = new ModelAndView();
         if(memberVO != null){
             HttpSession session = request.getSession();
-            mav.setViewName("redirect:/member/listMembers.do");
+            String action = (String)session.getAttribute("action");
             session.setAttribute("member", memberVO);
             session.setAttribute("isLogon", true);
+            if(action != null){
+                mav.setViewName("redirect:" + action);
+            }else{
+                mav.setViewName("redirect:/member/listMembers.do");
+            }
         }else{
             rAttr.addAttribute("result", "loginFailed");
             mav.setViewName("redirect:/member/loginForm.do");
@@ -89,40 +98,12 @@ public class MemberControllerImpl implements MemberController{
     private ModelAndView form(@RequestParam(value = "result", required = false) String result,
                               HttpServletRequest request,
                               HttpServletResponse response) throws Exception{
-        String viewName = getViewName(request);
+        String viewName = (String)request.getAttribute("viewName");
         ModelAndView mav = new ModelAndView();
         mav.addObject("result", result);
         mav.setViewName(viewName);
         return mav;
     }
 
-    private String getViewName(HttpServletRequest request){
-        String contextPath = request.getContextPath();
-        String uri = (String)request.getAttribute("javax.servlet.include.request_uri");
-        System.out.println(uri);
-        if(uri == null || uri.trim().equals("")){
-            uri = request.getRequestURI();
-        }
-        int begin = 0;
-        if(!((contextPath == null) || ("".equals(contextPath)))){
-            begin = contextPath.length();
-        }
-        int end;
-        if(uri.contains(";")){
-            end = uri.indexOf(";");
-        }else if(uri.contains("?")){
-            end = uri.indexOf("?");
-        }else{
-            end = uri.length();
-        }
-        String fileName = uri.substring(begin, end);
-        if(fileName.contains(".")){
-            fileName = fileName.substring(0, fileName.lastIndexOf("."));
-        }
-        if(fileName.lastIndexOf("/") != -1){
-            fileName = fileName.substring(fileName.lastIndexOf("/", 1));
-        }
-        System.out.println(fileName);
-        return fileName;
-    }
+
 }

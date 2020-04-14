@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.board">
+    <resultMap id="articleResult" type="articleVO">
+        <result property="articleNO" column="articleNO"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="pos" column="pos"/>
+        <result property="ref" column="ref"/>
+        <result property="depth" column="depth"/>
+        <result property="writeDate" column="writeDate"/>
+        <result property="id" column="id"/>
+        <result property="imageFileName" column="imageFileName"/>
+    </resultMap>
+    <select id="selectAllArticles" resultMap="articleResult">
+        select * from t_board order by ref desc;
+    </select>
+    <insert id="insertArticle" parameterType="java.util.Map">
+        insert into t_board(title, content, ref, writeDate, id, imageFileName)
+        values (#{title}, #{content}, ${ref}, default, #{id}, #{imageFileName})
+    </insert>
+    <select id="selectRef" resultType="int">
+        select max(articleNO)+1 from t_board
+    </select>
+    <select id="selectArticle" resultType="articleVO" parameterType="int">
+        select * from t_board where articleNO = #{articleNO}
+    </select>
+</mapper>

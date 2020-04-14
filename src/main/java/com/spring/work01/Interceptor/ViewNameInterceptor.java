@@ -1,4 +1,4 @@
-package com.spring.work01.member;
+package com.spring.work01.Interceptor;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -30,7 +30,6 @@ public class ViewNameInterceptor extends HandlerInterceptorAdapter {
     private String getViewName(HttpServletRequest request){
         String contextPath = request.getContextPath();
         String uri = (String)request.getAttribute("javax.servlet.include.request_uri");
-        System.out.println(uri);
         if(uri == null || uri.trim().equals("")){
             uri = request.getRequestURI();
         }

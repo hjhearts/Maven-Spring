@@ -18,8 +18,8 @@
 <body>
     <h1>사이드 메뉴</h1>
     <h1>
-        <a href="${contextPath}/#" class="no-underline">회원관리</a><br/>
-        <a href="${contextPath}/#" class="no-underline">게시판 관리</a><br/>
+        <a href="${contextPath}/member/listMembers.do" class="no-underline">회원관리</a><br/>
+        <a href="${contextPath}/board/listArticles.do" class="no-underline">게시판 관리</a><br/>
         <a href="${contextPath}/#" class="no-underline">상품 관리</a>
     </h1>
 </body>

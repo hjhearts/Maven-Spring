@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
     <title>Title</title>
@@ -13,17 +15,17 @@
     <script>
         $(function(){
             $('#checkJSON').on('click', function(){
-                var member = {
-                    id:'park',
-                    pwd:'1234',
-                    name:'jisungpark',
-                    email:'twohearts@korea.kr'
+                var article = {
+                    articleNO:'114',
+                    writer:'박지성',
+                    title:'hello',
+                    content:'this is content'
                 };
                 $.ajax({
                     type:'post',
-                    url:'${pageContext.request.contextPath}/test/info',
+                    url:'${contextPath}/boards',
                     contentType:"application/json",
-                    data:JSON.stringify(member),
+                    data:JSON.stringify(article),
                     success:function(data, textStatus){
                     },
                     error:function(d, ts){
@@ -35,7 +37,7 @@
     </script>
 </head>
 <body>
-    <input type="button" id="checkJSON" value="SEND JSON"/>
+    <input type="button" id="checkJSON" value="새글 등록"/>
     <div id="output"></div>
 </body>
 </html>
