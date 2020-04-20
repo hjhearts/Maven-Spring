@@ -19,11 +19,22 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public int addArticle(Map<String, Object> articleMap) {
-        return boardDAO.insertArticle(articleMap);
+        int articleNO = boardDAO.insertArticle(articleMap);
+        articleMap.put("articleNO", articleNO);
+        boardDAO.insertImage(articleMap);
+        return articleNO;
     }
 
     @Override
     public ArticleVO viewArticle(int articleNO) {
         return boardDAO.selectArticle(articleNO);
+    }
+
+    public void modArticle(ArticleVO vo){
+        boardDAO.updateArticle(vo);
+    }
+
+    public void delArticle(int articleNO){
+        boardDAO.deleteArticle(articleNO);
     }
 }

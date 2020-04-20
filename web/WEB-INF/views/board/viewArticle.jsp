@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-<form name="form" method="post">
+<form name="form" id="form" method="">
     <table>
         <tr>
             <td class="label">글제목</td>
@@ -43,7 +43,7 @@
         </tr>
         <tr>
             <td class="label">글내용</td>
-            <td><textarea rows="20" cols="60" name="content" id="content" disabled>${article.content}</textarea></td>
+            <td><textarea rows="20" cols="60" name="content" id="Tcontent" disabled>${article.content}</textarea></td>
         </tr>
         <c:if test="${not empty article.imageFileName}">
             <tr>
@@ -73,14 +73,15 @@
 <script>
     function toModify(){
         var title = document.getElementById("title");
-        var content = document.getElementById("content");
+        var content = document.getElementById("Tcontent");
         title.disabled = false;
         content.disabled = false;
         var btn = document.getElementById("modBtn");
         btn.value = '수정반영하기';
         btn.onclick = function(){
             var form = document.form;
-            form.action = '/board/modArticle.do';
+            form.method = 'POST';
+            form.action = '${contextPath}/board/modArticle.do';
             form.submit();
         }
     }
@@ -88,11 +89,13 @@
         var delMsg = confirm('정말로 삭제하시겠습니까?');
         if(delMsg){
             var form = document.form;
-            form.action = '/board/delArticle.do';
+            form.method = 'POST';
+            form.action = '${contextPath}/board/delArticle.do/${article.articleNO}';
             form.submit();
         }
     }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<input type="hidden" name="articleNO" value="${article.articleNO}"/>
 </body>
 </html>

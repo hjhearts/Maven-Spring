@@ -9,4 +9,7 @@ public interface BoardDAO {
     List<ArticleVO> selectAllArticles();
     int insertArticle(Map<String, Object> articleMap);
     ArticleVO selectArticle(int articleNO);
+    void updateArticle(ArticleVO vo);
+    void deleteArticle(int articleNO);
+    void insertImage(Map<String, Object> articleMap);
 }

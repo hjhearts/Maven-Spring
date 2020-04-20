@@ -2,6 +2,7 @@ package com.spring.work01.board.controller;
 
 import com.spring.work01.board.service.BoardService;
 import com.spring.work01.board.vo.ArticleVO;
+import com.spring.work01.board.vo.ImageVO;
 import com.spring.work01.member.vo.MemberVO;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,19 +62,31 @@ public class BoardControllerImpl implements BoardController {
             System.out.println(parameterName + ":" + parameterValue);
             articleMap.put(parameterName, parameterValue);
         }
-        String imageFileName = upload(multipartRequest);
+        List<String> fileList = upload(multipartRequest);
+        List<ImageVO> imageFileList = new ArrayList<>();
+        if(fileList.size() != 0) {
+            for (String fileName : fileList) {
+                ImageVO imageVO = new ImageVO();
+                imageVO.setImageFileName(fileName);
+                imageFileList.add(imageVO);
+            }
+            articleMap.put("imageFileName", imageFileList);
+        }
         MemberVO memberVO = (MemberVO)httpSession.getAttribute("member");
         String id = memberVO.getId();
         articleMap.put("id", id);
-        articleMap.put("imageFileName", imageFileName);
+        articleMap.put("imageFileList", imageFileList);
         String message;
         ResponseEntity responseEntity;
         try{
             int articleNO = boardService.addArticle(articleMap);
-            if(imageFileName != null && imageFileName.length()!=0){
-                File srcFile = new File(ARTICLE_IMAGE_REPO + "/temp/" + imageFileName);
-                File destFile = new File(ARTICLE_IMAGE_REPO + "/" + articleNO);
-                FileUtils.moveFileToDirectory(srcFile, destFile, true);
+            if(imageFileList.size() != 0){
+                for(ImageVO imageVO : imageFileList){
+                    String imageFileName = imageVO.getImageFileName();
+                    File srcFile = new File(ARTICLE_IMAGE_REPO + "/temp/" + imageFileName);
+                    File destDir = new File(ARTICLE_IMAGE_REPO + "/" + articleNO);
+                    FileUtils.moveFileToDirectory(srcFile, destDir, true);
+                }
             }
             message = "<script>";
             message += "alert('새글을 추가했습니다.');";
@@ -81,12 +94,17 @@ public class BoardControllerImpl implements BoardController {
             message += "</script>";
             responseEntity = new ResponseEntity(message, httpHeaders, HttpStatus.CREATED);
         }catch(Exception e){
-            File srcFile = new File(ARTICLE_IMAGE_REPO + "/temp/" + imageFileName);
-            srcFile.delete();
+            if(imageFileList.size() != 0){
+                for(ImageVO imageVO : imageFileList){
+                    String imageFileName = imageVO.getImageFileName();
+                    File srcFile = new File(ARTICLE_IMAGE_REPO + "/temp/" + imageFileName);
+                    srcFile.delete();
+                }
+            }
             message = "<script>";
             message += "alert('오류가 발생했습니다.')";
             message += "location.href='" + multipartRequest.getContextPath() + "/board/articleForm.do';";
-            responseEntity = new ResponseEntity(memberVO, httpHeaders, HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity(message, httpHeaders, HttpStatus.BAD_REQUEST);
             e.printStackTrace();
         }
         return responseEntity;
@@ -97,13 +115,15 @@ public class BoardControllerImpl implements BoardController {
         return new ModelAndView((String)request.getAttribute("viewName"));
     }
 
-    private String upload(MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+    private List<String> upload(MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+        List<String> imageFileList = new ArrayList<>();
         String imageFileName = null;
         Iterator<String> fileNames = multipartHttpServletRequest.getFileNames();
         while(fileNames.hasNext()){
             String fileName = fileNames.next();
             MultipartFile multipartFile = multipartHttpServletRequest.getFile(fileName);
             imageFileName = multipartFile.getOriginalFilename();
+            imageFileList.add(imageFileName);
             File file = new File(ARTICLE_IMAGE_REPO + "/" + fileName);
             if(multipartFile.getSize() != 0){
                 if(! file.exists()){
@@ -113,8 +133,9 @@ public class BoardControllerImpl implements BoardController {
                 }
                 multipartFile.transferTo(new File(ARTICLE_IMAGE_REPO + "/temp/" + imageFileName));
             }
+
         }
-        return imageFileName;
+        return imageFileList;
     }
     @RequestMapping(value = "/board/viewArticle.do", method = RequestMethod.GET)
     public ModelAndView viewArticle(@RequestParam("articleNO") int articleNO,
@@ -125,5 +146,26 @@ public class BoardControllerImpl implements BoardController {
         ModelAndView mav = new ModelAndView(viewName);
         mav.addObject("article", articleVO);
         return mav;
+    }
+
+    @RequestMapping(value = "/board/modArticle.do", method = RequestMethod.POST)
+    public ResponseEntity<String> modArticle(HttpServletRequest request,
+                                   @ModelAttribute ArticleVO vo,
+                                   HttpServletResponse response){
+        response.setContentType("text/html;charset=utf-8");
+        boardService.modArticle(vo);
+        return new ResponseEntity<>("<script>" +
+                "alert('수정 완료');location.href='" + request.getContextPath() +"/board/listArticles.do';" +
+                "</script>", HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/board/delArticle.do/{articleNO}")
+    public ResponseEntity<String> delArticle(@PathVariable("articleNO") int articleNO,
+                                             HttpServletRequest request,
+                                             HttpServletResponse response){
+        boardService.delArticle(articleNO);
+        return new ResponseEntity<>("<script>" +
+                "alert('삭제완료');" +
+                "location.href='" + request.getContextPath() + "/board/listArticles.do';" +
+                "</script>", HttpStatus.OK);
     }
 }

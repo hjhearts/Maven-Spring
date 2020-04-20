@@ -57,7 +57,7 @@
             </tr>
             <tr>
                 <td>파일 첨부</td>
-                <td><div id="files"><input type="file" name="imageFileName" onchange="readURL(this)"/><br/>
+                <td><div id="d_file"><input type="file" name="imageFileName" onchange="readURL(this)"/><br/>
                 <input type="button" onclick="fn_addFile()" value="파일추가"/> </div></td>
             </tr>
             <tr>

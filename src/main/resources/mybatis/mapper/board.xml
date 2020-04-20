@@ -18,8 +18,8 @@
         select * from t_board order by ref desc;
     </select>
     <insert id="insertArticle" parameterType="java.util.Map">
-        insert into t_board(title, content, ref, writeDate, id, imageFileName)
-        values (#{title}, #{content}, ${ref}, default, #{id}, #{imageFileName})
+        insert into t_board(title, content, ref, writeDate, id)
+        values (#{title}, #{content}, ${ref}, default, #{id})
     </insert>
     <select id="selectRef" resultType="int">
         select max(articleNO)+1 from t_board
@@ -27,4 +27,18 @@
     <select id="selectArticle" resultType="articleVO" parameterType="int">
         select * from t_board where articleNO = #{articleNO}
     </select>
+    <update id="updateArticle" parameterType="memberVO"><![CDATA[
+        update t_board
+        set title = #{title}, content = #{content}
+        where articleNO = #{articleNO}
+        ]]></update>
+    <delete id="deleteArticle" parameterType="int">
+        delete from t_board where articleNO = #{articleNO}
+    </delete>
+    <insert id="insertImage" parameterType="java.util.Map">
+        <foreach collection="list" item="item" open="INSERT ">
+            insert into t_imagefile(imageFileNO, imageFileName, articleNO, regDate)
+            values (max(imageFileNO)+1, #{item.imageFileName}, #{item.articleNO}, now());
+        </foreach>
+    </insert>
 </mapper>

@@ -9,4 +9,6 @@ public interface BoardService {
     List<ArticleVO> listArticles();
     int addArticle(Map<String, Object> articleMap);
     ArticleVO viewArticle(int articleNO);
+    void modArticle(ArticleVO vo);
+    void delArticle(int articleNO);
 }
